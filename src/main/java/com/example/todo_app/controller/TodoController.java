@@ -1,6 +1,8 @@
 package com.example.todo_app.controller;
 
+import org.springframework.http.MediaType;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
+import org.springframework.http.HttpHeaders;
 import com.example.todo_app.dto.TodoCraeteDto;
 import com.example.todo_app.dto.TodoDto;
 import com.example.todo_app.service.TodoService;
@@ -44,14 +46,35 @@ public class TodoController {
 
     @PostMapping("/uploade-excel")
     public ResponseEntity<String> uploadeExcel(@RequestParam("file") MultipartFile file) {
-        if (file.isEmpty()) {
-            return ResponseEntity.badRequest().body("plzz select a file to upload");
+        try {
+            if (file.isEmpty()) {
+                return ResponseEntity.badRequest().body("plzz select a file to upload");
+            }
+
+            todoService.uploadExcelFile(file);
+
+            return ResponseEntity.ok("todos uploaded successfully!");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error uploading file: " + e.getMessage());
         }
+    }
 
-        // todoService.uploadExcelFile(file);
+    @GetMapping("/download-todo")
+    public ResponseEntity<byte[]> downloadExcel() {
+        try {
+            byte[] excelBytes = todoService.downloadExcelFile();
 
-        return ResponseEntity.ok("todos uploaded successfully!");
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=todos.xlsx");
 
+            return new ResponseEntity<>(excelBytes, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null);
+        }
     }
 
     @PutMapping("/toggle-todo/{id}")
