@@ -1,6 +1,9 @@
 package com.example.todo_app.controller;
 
 import org.springframework.http.MediaType;
+
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -85,5 +88,10 @@ public class TodoController {
     @DeleteMapping("/delete-todo/{id}")
     public ResponseEntity<TodoDto> deleteTode(@PathVariable Long id) {
         return ResponseEntity.ok(todoService.deleteTodo(id));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<TodoDto>> searchTodos(@RequestParam String query) {
+        return ResponseEntity.ok(todoService.searchTodos(query));
     }
 }

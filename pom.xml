@@ -48,6 +48,14 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- INSERT_YOUR_CODE -->
+		<!-- Swagger dependencies for OpenAPI documentation -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.5.0</version>
+		</dependency>
+
 		<!-- Spring Data JPA (Hibernate ORM support) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

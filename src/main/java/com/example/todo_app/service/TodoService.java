@@ -56,6 +56,13 @@ public class TodoService {
         return convertToDto(todo);
     }
 
+    public List<TodoDto> searchTodos(String query) {
+        List<Todo> todos = todoRepository.findByTitleContainingIgnoreCase(query);
+        return todos.stream()
+                .map(this::convertToDto)
+                .toList();
+    }
+
     public String toggleTodo(Long id) {
         Todo todo = todoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Id not found: " + id));

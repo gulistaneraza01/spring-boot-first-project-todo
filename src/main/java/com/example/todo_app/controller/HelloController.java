@@ -6,8 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HelloController {
     @GetMapping("/hello")
-    public int[] hello() {
-        int[] nums = { 1, 23, 4 };
-        return nums;
+    public String hello() {
+        return "hello from Server";
     }
 }
